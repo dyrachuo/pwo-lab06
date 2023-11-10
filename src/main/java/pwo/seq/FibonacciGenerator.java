@@ -1,36 +1,45 @@
 package pwo.seq;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FibonacciGenerator extends Generator {
 
+    private List<BigDecimal> fibonacciSequence;
+
     public FibonacciGenerator() {
-        current = new BigDecimal(0);
-        f_1 = new BigDecimal(1);
-        f_2 = new BigDecimal(0);
+        fibonacciSequence = new ArrayList<>();
+        fibonacciSequence.add(new BigDecimal(0));
+        fibonacciSequence.add(new BigDecimal(1));
     }
 
     @Override
     public void reset() {
         super.reset();
-        current = new BigDecimal(0);
-        f_1 = new BigDecimal(1);
-        f_2 = new BigDecimal(0);
+        fibonacciSequence.clear();
+        fibonacciSequence.add(new BigDecimal(0));
+        fibonacciSequence.add(new BigDecimal(1));
     }
 
     @Override
     public BigDecimal nextTerm() {
-        if (lastIndex > 1) {
-            current = f_1.add(f_2);
-            f_2 = f_1;
-            f_1 = current;
-        } else if (lastIndex == 1) {
-            current = new BigDecimal(1);
+        if (lastIndex < fibonacciSequence.size()) {
+            current = fibonacciSequence.get(lastIndex);
         } else {
-            current = new BigDecimal(0);
+            current = fibonacciSequence.get(lastIndex - 1).add(fibonacciSequence.get(lastIndex - 2));
+            fibonacciSequence.add(current);
         }
 
         lastIndex++;
         return current;
+    }
+
+    public BigDecimal previousTerm() {
+        if (lastIndex > 1) {
+            return fibonacciSequence.get(lastIndex - 2);
+        } else {
+            return new BigDecimal(0);
+        }
     }
 }
